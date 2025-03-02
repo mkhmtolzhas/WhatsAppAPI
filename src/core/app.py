@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from ..api.global_router import router
+from src.api.global_router import router
 
 class AppCreator:
     def __init__(self, allow_origins: list[str] = ["*"]):
