@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Request
 from .exeptions import WhatsAppException
 from .service import service
-from .schemas import SendMessage, SendVoice
+from .schemas.message import SendMessage, SendVoice
+from .schemas.recieve import RecieveMessage
 from .utils import WhatsAppUtils
 
 router = APIRouter(prefix="/whatsapp", tags=["WhatsApp"])
@@ -24,7 +25,6 @@ async def send_voice(data: SendVoice):
 
 
 @router.post("/on_message")
-async def on_message(data: Request):
-    payload = await data.json()
-    await service.send_message(to="+77767301903", body=payload)
+async def on_message(data: RecieveMessage):
+    await service.send_message(to=data.data.from_, body="Олжас тебя любит больше чем ты его")
     return {"status": "OK"}
