@@ -26,5 +26,5 @@ async def send_voice(data: SendVoice):
 @router.post("/on_message")
 async def on_message(data: Request):
     print(data)
-    service.send_message(to="+77767301903", body=data)
+    await service.send_message(to="+77767301903", body=data)
     return {"status": "OK"}
