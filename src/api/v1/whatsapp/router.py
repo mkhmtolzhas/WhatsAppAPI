@@ -26,5 +26,5 @@ async def send_voice(data: SendVoice):
 
 @router.post("/on_message")
 async def on_message(data: RecieveMessage):
-    await service.send_message(to=data.data.from_, body="Олжас тебя любит больше чем ты его")
+    await service.send_message(to=data.data.from_, body="Привет, это бот Олжас, только вот он не до конца готов, так что пока не пиши окей?")
     return {"status": "OK"}
