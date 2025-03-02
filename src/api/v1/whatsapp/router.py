@@ -1,5 +1,4 @@
-from fastapi import APIRouter
-from src.core.exeptions import GlobalException
+from fastapi import APIRouter, Request
 from .exeptions import WhatsAppException
 from .service import service
 from .schemas import SendMessage, SendVoice
@@ -25,10 +24,7 @@ async def send_voice(data: SendVoice):
 
 
 @router.post("/on_message")
-async def on_message(data: SendMessage):
-    if not WhatsAppUtils.is_valid_phone_number(data.to):
-        raise WhatsAppException.InvalidPhoneNumber()
-    if not data.body:
-        raise WhatsAppException.InvalidMessage()
-    print(f"Message from {data.to}: {data.body}")
+async def on_message(data: Request):
+    print(data)
+    service.send_message(to="+77767301903", body=data)
     return {"status": "OK"}
