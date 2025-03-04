@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     redis_port: int
     redis_password: str
     redis_username: str
+    llm_host: str
 
 
     class Config:

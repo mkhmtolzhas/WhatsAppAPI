@@ -4,7 +4,8 @@ from .service import service
 from .schemas.message import SendMessage, SendVoice
 from .schemas.recieve import RecieveMessage
 from .utils import WhatsAppUtils
-from src.core.broker.client import broker_client
+
+
 
 router = APIRouter(prefix="/whatsapp", tags=["WhatsApp"])
 
@@ -27,9 +28,7 @@ async def send_voice(data: SendVoice):
 
 @router.post("/on_message")
 async def on_message(data: RecieveMessage):
-    message = str({
-        "user": data.data.from_,
-        "response": data.data.body
-    })
-    await broker_client.publish(message)
+    response = await WhatsAppUtils.get_response(data.data.from_, data.data.body)
+
+    await send_message(SendMessage(to=data.data.from_, body=response['response']))
     return {"status": "OK"}

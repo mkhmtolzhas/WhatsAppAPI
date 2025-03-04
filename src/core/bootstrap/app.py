@@ -12,7 +12,7 @@ class AppCreator:
         )
         self.setup_middlewares(allow_origins)
         self.setup_routers()
-        self.setup_listeners(app=self.app)
+        # self.setup_listeners(app=self.app)
 
 
     def setup_middlewares(self, allow_origins: list[str]):
