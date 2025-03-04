@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 from .exeptions import WhatsAppException
 from .service import service
 from .schemas.message import SendMessage, SendVoice
 from .schemas.recieve import RecieveMessage
 from .utils import WhatsAppUtils
+from src.core.broker.client import broker_client
 
 router = APIRouter(prefix="/whatsapp", tags=["WhatsApp"])
 
@@ -26,5 +27,9 @@ async def send_voice(data: SendVoice):
 
 @router.post("/on_message")
 async def on_message(data: RecieveMessage):
-    await service.send_message(to=data.data.from_, body="Привет, это бот Олжас, только вот он не до конца готов, так что пока не пиши окей?")
+    message = {
+        "user": data.data.from_,
+        "response": data.data.body
+    }
+    await broker_client.publish(message)
     return {"status": "OK"}

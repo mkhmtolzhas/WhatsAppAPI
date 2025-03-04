@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.global_router import router
+from .listeners import Listener
 
 class AppCreator:
     def __init__(self, allow_origins: list[str] = ["*"]):
@@ -11,6 +12,7 @@ class AppCreator:
         )
         self.setup_middlewares(allow_origins)
         self.setup_routers()
+        self.setup_listeners(app=self.app)
 
 
     def setup_middlewares(self, allow_origins: list[str]):
@@ -24,6 +26,9 @@ class AppCreator:
     
     def setup_routers(self):
         self.app.include_router(router)
+    
+    def setup_listeners(self, app: FastAPI):
+        Listener.init_listeners(app=app)
     
 
     def get_app(self) -> FastAPI:

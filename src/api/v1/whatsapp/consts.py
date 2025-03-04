@@ -1,4 +1,0 @@
-class Consts:
-    flow = {
-        
-    }
