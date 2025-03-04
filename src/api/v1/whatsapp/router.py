@@ -27,9 +27,9 @@ async def send_voice(data: SendVoice):
 
 @router.post("/on_message")
 async def on_message(data: RecieveMessage):
-    message = {
+    message = str({
         "user": data.data.from_,
         "response": data.data.body
-    }
+    })
     await broker_client.publish(message)
     return {"status": "OK"}

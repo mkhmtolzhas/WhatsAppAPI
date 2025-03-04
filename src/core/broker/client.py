@@ -16,7 +16,7 @@ class BrokerClient:
         await self.client.ping() 
 
 
-    async def publish(self, message: dict):
+    async def publish(self, message: str):
         await self.client.publish(self.publish_channel, message)
 
 
