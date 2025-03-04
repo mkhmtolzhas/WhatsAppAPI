@@ -1,5 +1,4 @@
 import httpx
-import asyncio
 from re import fullmatch
 from src.core.config import settings
 

@@ -30,5 +30,5 @@ async def send_voice(data: SendVoice):
 async def on_message(data: RecieveMessage):
     response = await WhatsAppUtils.get_response(data.data.from_, data.data.body)
 
-    await send_message(SendMessage(to=data.data.from_, body=response['response']))
+    await service.send_message(data.data.from_, response["response"])
     return {"status": "OK"}
