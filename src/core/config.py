@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     ultramsg_instance_id: str
     ultramsg_token: str
     llm_host: str
+    rabbitmq_url: str
 
 
     class Config:
