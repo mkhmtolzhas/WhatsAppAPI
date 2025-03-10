@@ -1,5 +1,5 @@
 import json
-from config import settings
+from src.core.config import settings
 from aio_pika import connect_robust, ExchangeType, Message, DeliveryMode
 
 

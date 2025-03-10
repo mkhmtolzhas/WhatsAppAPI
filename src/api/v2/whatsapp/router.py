@@ -1,34 +1,26 @@
+import asyncio
+import json
+from aio_pika import IncomingMessage
 from fastapi import APIRouter
-from .exeptions import WhatsAppException
 from .service import service
-from .schemas.message import SendMessage, SendVoice
 from .schemas.recieve import RecieveMessage
 from .utils import WhatsAppUtils
-
+from src.core.messaging.broker import broker
 
 
 router = APIRouter(prefix="/whatsapp", tags=["WhatsApp"])
 
-@router.post("/send_message")
-async def send_message(data: SendMessage):
-    if not WhatsAppUtils.is_valid_phone_number(data.to):
-        raise WhatsAppException.InvalidPhoneNumber()
-    if not data.body:
-        raise WhatsAppException.InvalidMessage()
-    return await service.send_message(data.to, data.body)
+async def callback(message: IncomingMessage):
+    async with message.process():
+        message = json.loads(message.body.decode())
+        print(message)
+        await service.send_message(message["user"], message["response"])
 
-@router.post("/send_voice")
-async def send_voice(data: SendVoice):
-    if not WhatsAppUtils.is_valid_phone_number(data.to):
-        raise WhatsAppException.InvalidPhoneNumber()
-    if not data.audio:
-        raise WhatsAppException.InvalidAudio()
-    return await service.send_audio(data.to, data.audio)
+async def consuming():
+    await broker.consume(callback=callback, queue_name="llm", exchange_name="llm", routing_key="llm")
 
 
 @router.post("/on_message")
 async def on_message(data: RecieveMessage):
-    response = await WhatsAppUtils.get_response(data.data.from_, data.data.body)
-
-    await service.send_message(data.data.from_, response["response"])
+    await WhatsAppUtils.publish_message(data.data.from_, data.data.body)
     return {"status": "OK"}
