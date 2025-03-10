@@ -13,7 +13,6 @@ router = APIRouter(prefix="/whatsapp", tags=["WhatsApp"])
 async def callback(message: IncomingMessage):
     async with message.process():
         message = json.loads(message.body.decode())
-        print(message)
         await service.send_message(message["user"], message["response"])
 
 async def consuming():
